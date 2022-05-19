@@ -22,17 +22,16 @@ import {
 } from '@coreui/react'
 
 import { DocsCallout, DocsExample } from 'src/components'
-
 export default class Usernew extends React.Component {
   state = {
-    username : '',
-    email : '',
-    password : '',
-    phone : '',
-    role : '',
-    status : Boolean
+    username: '',
+    email: '',
+    password: '',
+    phone: '',
+    role: '',
+    status: Boolean,
+    validate: false,
   }
-
   handleUsernameChange = (event) => {
     this.setState({ username: event.target.value })
   }
@@ -47,28 +46,31 @@ export default class Usernew extends React.Component {
   }
   handleRoleChange = (event) => {
     this.setState({ role: event.target.value })
-  } 
-
+  }
   handleSubmit = (event) => {
-    event.preventDefault()
-    const username    = this.state.username 
-    const email       = this.state.email    
-    const password    = this.state.password 
-    const phone       = this.state.phone    
-    const role        = this.state.role     
-    const status      = this.state.status
-    alert(username)
-    axios.post("http://localhost:9000/user", { 
-      username  : username,
-      email     : email,
-      password  : password,
-      phone     : phone,
-      role      : role,
-      status    : status,
-    }).then((res) => {
-      console.log(res)
-      console.log(res.data)
-    })
+    if (event.currentTarget.checkValidity() === false) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    this.setState({ validate: true })
+    const username = this.state.username
+    const email = this.state.email
+    const password = this.state.password
+    const phone = this.state.phone
+    const role = this.state.role
+    const status = this.state.status
+    axios
+      .post('http://localhost:9000/user', {
+        username: username,
+        email: email,
+        password: password,
+        phone: phone,
+        role: role,
+        status: status,
+      })
+      .then((res) => {
+        window.location.href = 'http://localhost:3000/user/list'; 
+      })
   }
 
   render() {
@@ -80,11 +82,16 @@ export default class Usernew extends React.Component {
               <strong>Tambah User Baru</strong>
             </CCardHeader>
             <CCardBody>
-              <CForm className="row g-3" onSubmit={this.handleSubmit}>
+              <CForm
+                className="row g-3"
+                noValidate
+                validated={this.state.validate}
+                onSubmit={this.handleSubmit}
+              >
                 <CCol xs={12}>
                   <CFormLabel htmlFor="staticEmail2" className="visually-hidden">
                     Username
-                  </CFormLabel>                  
+                  </CFormLabel>
                   <CFormInput
                     type="text"
                     id="username"
@@ -94,6 +101,7 @@ export default class Usernew extends React.Component {
                     aria-describedby="exampleFormControlInputHelpInline"
                     name="username"
                     onChange={this.handleUsernameChange}
+                    required
                   />
                 </CCol>
                 <CCol xs={12}>
@@ -109,6 +117,7 @@ export default class Usernew extends React.Component {
                     aria-describedby="exampleFormControlInputHelpInline"
                     name="email"
                     onChange={this.handleEmailChange}
+                    required
                   />
                 </CCol>
                 <CCol xs={12}>
@@ -121,6 +130,7 @@ export default class Usernew extends React.Component {
                     placeholder="******"
                     name="password"
                     onChange={this.handlePasswordChange}
+                    required
                   />
                 </CCol>
                 <CCol xs={12}>
@@ -133,6 +143,7 @@ export default class Usernew extends React.Component {
                     placeholder="085236176565"
                     name="phone"
                     onChange={this.handlePhoneChange}
+                    required
                   />
                 </CCol>
 
@@ -140,7 +151,15 @@ export default class Usernew extends React.Component {
                   <CFormLabel htmlFor="inputPassword2" className="visually-hidden">
                     Phone
                   </CFormLabel>
-                  <CFormSelect name="role" aria-label="Default select example" onChange={this.handleRoleChange}>
+                  <CFormSelect
+                    name="role"
+                    aria-label="Default select example"
+                    onChange={this.handleRoleChange}
+                    required
+                  >
+                    <option disabled selected>
+                      Pilih Role
+                    </option>
                     <option value="1">Admin</option>
                     <option value="0">Users</option>
                   </CFormSelect>
