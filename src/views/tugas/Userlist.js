@@ -23,7 +23,7 @@ import { Link } from 'react-router-dom'
 
 import { DocsCallout, DocsExample } from 'src/components'
 
-const url = 'http://localhost:9000/users'
+const url = 'http://167.172.73.163:9091/users'
 
 export default class Userlist extends React.Component {
   state = {

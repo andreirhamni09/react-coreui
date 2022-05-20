@@ -48,7 +48,7 @@ export default class Usernew extends React.Component {
     this.setState({ role: event.target.value })
   }
   handleSubmit = (event) => {
-    if (event.currentTarget.checkValidity() === false) {
+    if (event.currentTarget.checkValidity() === false) {   
       event.preventDefault()
       event.stopPropagation()
     }
@@ -58,9 +58,9 @@ export default class Usernew extends React.Component {
     const password = this.state.password
     const phone = this.state.phone
     const role = this.state.role
-    const status = this.state.status
+    const status = true
     axios
-      .post('http://localhost:9000/user', {
+      .post('http://167.172.73.163:9091/user', {
         username: username,
         email: email,
         password: password,
@@ -69,7 +69,10 @@ export default class Usernew extends React.Component {
         status: status,
       })
       .then((res) => {
-        window.location.href = 'http://localhost:3000/user/list'; 
+        window.location.href = 'http://localhost:3000/user/list'
+      })
+      .catch(function (error) {
+        alert(error.response.data.message);
       })
   }
 
@@ -82,7 +85,7 @@ export default class Usernew extends React.Component {
               <strong>Tambah User Baru</strong>
             </CCardHeader>
             <CCardBody>
-              <CForm
+            <CForm
                 className="row g-3"
                 noValidate
                 validated={this.state.validate}

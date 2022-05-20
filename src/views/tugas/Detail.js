@@ -27,7 +27,7 @@ import { useParams } from 'react-router-dom'
 const Detail = () =>{
   const [users, setUsers] = useState([]);
   let { id } = useParams()
-  const url = 'http://localhost:9000/user/'+id
+  const url = 'http://167.172.73.163:9091/user/'+id
   useEffect(() => {  
     
     axios.get(url).then((res) => {
